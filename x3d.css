@@ -1,0 +1,179 @@
+/* x3d.css · LoanBud · Employee Buyout Financing · depth and motion layer
+ * Everything here is gated on html.x3-on (set by x3d.js), so without the script the page is unchanged.
+ * Loops stop under html.motion-paused (the page's own motion switch) and under prefers-reduced-motion. */
+
+/* ---------- Header: glass on scroll + reading progress ---------- */
+.x3-on.is-scrolled .hdr{background:rgba(255,255,255,.8);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px)}
+.x3-progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;transform-origin:left;transform:scaleX(var(--x3-p,0));background:linear-gradient(90deg,var(--green),var(--oasis) 70%,var(--citron));pointer-events:none}
+
+/* ---------- Hero ambience ---------- */
+/* decorative canvases may bleed past the content column, never past the viewport */
+.x3-on #hero,.x3-on #start{overflow-x:clip}
+.x3-on #hero{position:relative;isolation:isolate}
+.x3-on #hero::before{content:"";position:absolute;inset:-80px 0 0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(620px 440px at 80% 34%,rgba(137,205,173,.30),transparent 70%),
+    radial-gradient(520px 380px at 8% 84%,rgba(237,183,75,.13),transparent 70%),
+    radial-gradient(760px 520px at 52% -4%,rgba(0,163,91,.09),transparent 70%);
+  animation:x3-aurora 16s ease-in-out infinite alternate}
+@keyframes x3-aurora{from{transform:translate3d(-1.5%,0,0) scale(1)}to{transform:translate3d(2%,-2%,0) scale(1.08)}}
+
+.x3-on .h1-accent:not(.fx-hold){background:linear-gradient(100deg,var(--green) 0 42%,#27c482 50%,var(--green) 58% 100%) 100% 0/260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:x3-shine 7s ease-in-out 1.2s infinite}
+@keyframes x3-shine{0%,55%{background-position:100% 0}100%{background-position:0 0}}
+
+/* WebGL key scene: sits over the photo's signature corner, under the Lake badge */
+.x3-hero{position:absolute;left:-12%;top:-14%;width:124%;height:122%;max-width:none;z-index:2;pointer-events:none;opacity:0;transition:opacity 700ms var(--ease-out);filter:drop-shadow(0 16px 16px rgba(11,12,61,.2))}
+.x3-hero.is-on{opacity:1}
+
+/* ---------- Photos: perspective tilt, depth and a moving glare ---------- */
+.x3-tilt{transform:perspective(1100px) rotateX(calc(var(--rx,0)*1deg)) rotateY(calc(var(--ry,0)*1deg));transform-style:preserve-3d;will-change:transform}
+.x3-on .ph.x3-glare::after,.x3-on .x3-tilt>.ph::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:var(--go,0);transition:opacity 400ms var(--ease-out);
+  background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.26),rgba(255,255,255,.06) 45%,transparent 70%);mix-blend-mode:soft-light}
+.x3-on .ph.x3-glare,.x3-on .x3-tilt>.ph{transition:box-shadow 400ms var(--ease-out)}
+.x3-on .ph.x3-glare.is-hot,.x3-on .x3-tilt.is-hot>.ph{box-shadow:0 34px 60px -30px rgba(11,12,61,.45)}
+@media (hover:hover) and (pointer:fine){
+  .x3-on .ph[data-fx="drift"] .ph__vid{scale:1.05;translate:calc(var(--ry,0)*-1.3px) calc(var(--rx,0)*1.3px)}
+  .x3-on .ph[data-fx="drift"] .ph__img{scale:1.05;translate:calc(var(--ry,0)*-1.3px) calc(var(--rx,0)*1.3px);transition:opacity 300ms var(--ease-out),scale 600ms var(--ease-out)}
+}
+
+/* Lake badge: slow float (transform is free: fx.js drives rotate/translate) */
+.x3-on:not(.motion-paused) .badge{animation:x3-float 6.5s ease-in-out infinite}
+.x3-on .badge{box-shadow:0 30px 70px -22px rgba(5,63,79,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.x3-on .badge__tile{position:relative;transition:transform 700ms var(--ease-out)}
+.x3-on .badge:hover .badge__tile{transform:perspective(400px) rotateY(360deg)}
+.x3-on .badge__tile::after{content:"";position:absolute;inset:0;border-radius:inherit;border:1px solid rgba(137,205,173,.6);opacity:0}
+.x3-on:not(.motion-paused) .badge__tile::after{animation:x3-ping 3.2s var(--ease-out) infinite}
+@keyframes x3-float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
+@keyframes x3-ping{0%{opacity:.8;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.45)}}
+
+/* ---------- Proof rail: a rotating strand of lender nodes around the divider ---------- */
+.x3-strand-wrap{position:relative;height:0}
+.x3-strand{position:absolute;left:0;top:-23px;width:100%;height:46px;pointer-events:none}
+.x3-on .rail li{transition:transform var(--dur-2) var(--ease-out)}
+@media (hover:hover){.x3-on .rail li:hover{transform:translateY(-3px)}}
+
+/* ---------- Primary button: depth, glow and a light sweep ---------- */
+.x3-on .btn--primary{position:relative;overflow:hidden;box-shadow:0 14px 26px -14px rgba(0,163,91,.7),inset 0 1px 0 rgba(255,255,255,.22);transition:background-color var(--dur-1) var(--ease-out),transform var(--dur-1) var(--ease-out),box-shadow var(--dur-2) var(--ease-out),translate 500ms var(--ease-out),opacity var(--dur-1) var(--ease-out),visibility var(--dur-1)}
+.x3-on .btn--primary:hover{box-shadow:0 20px 34px -14px rgba(0,163,91,.8),inset 0 1px 0 rgba(255,255,255,.22)}
+.x3-on .btn--primary::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.34),transparent);transform:skewX(-18deg);pointer-events:none}
+.x3-on .btn--primary:hover::after{animation:x3-sweep 900ms var(--ease-out)}
+.x3-on:not(.motion-paused) .hero__actions .btn--primary::after{animation:x3-sweep 5.5s var(--ease-out) 2s infinite}
+@keyframes x3-sweep{0%{left:-60%}22%,100%{left:130%}}
+.x3-on .chip{transition:border-color var(--dur-1) var(--ease-out),transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out)}
+@media (hover:hover){.x3-on .chip:hover{transform:translateY(-2px);box-shadow:0 12px 22px -14px rgba(11,12,61,.35)}}
+
+/* ---------- Scroll reveals ---------- */
+.x3-rv{opacity:0;transform:translate3d(0,26px,0);filter:blur(6px)}
+.x3-rv.x3-in{opacity:1;transform:none;filter:none;transition:opacity 800ms var(--ease-out),transform 900ms var(--ease-out),filter 800ms var(--ease-out);transition-delay:calc(var(--d,0)*90ms)}
+.x3-on .sec__intro .tile{transition:transform 1100ms var(--ease-out) 150ms}
+.x3-on .sec__intro.x3-rv .tile{transform:perspective(300px) rotateY(-360deg)}
+.x3-on .sec__intro.x3-rv.x3-in .tile{transform:perspective(300px) rotateY(0)}
+
+/* ---------- Story stage ---------- */
+.x3-on .story{position:relative;isolation:isolate}
+.x3-on .story::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(360px circle at var(--mx,72%) var(--my,40%),rgba(255,255,255,.95),transparent 70%),
+    radial-gradient(520px 380px at 88% 8%,rgba(137,205,173,.34),transparent 70%),
+    radial-gradient(460px 340px at 6% 100%,rgba(237,183,75,.12),transparent 70%)}
+.x3-on .story::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(5,63,79,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(5,63,79,.05) 1px,transparent 1px);background-size:32px 32px;
+  -webkit-mask-image:radial-gradient(520px 360px at 82% 46%,#000,transparent 75%);mask-image:radial-gradient(520px 360px at 82% 46%,#000,transparent 75%)}
+.x3-on .pin{background:rgba(255,255,255,.84);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);box-shadow:0 28px 64px -22px rgba(11,12,61,.34),inset 0 0 0 1px rgba(255,255,255,.75)}
+.x3-on .tab__n{transition:color var(--dur-2) var(--ease-out)}
+.x3-on .tab[aria-selected="true"] .tab__n{color:var(--green-hover)}
+
+/* cards arrive in depth (transform is free: fx.js drives rotate/translate) */
+.x3-on:not(.motion-paused) .pin.is-active{animation:x3-card 700ms cubic-bezier(.2,.9,.3,1) both;transform-origin:50% 100%}
+@keyframes x3-card{from{opacity:0;transform:perspective(900px) translate3d(0,26px,0) rotateX(-28deg) scale(.94)}}
+
+/* card 1: the gap, drawn */
+.x3-gap{display:block;position:relative;height:8px;margin-top:12px;border-radius:4px;overflow:hidden;background:repeating-linear-gradient(-45deg,var(--neutral-1) 0 4px,var(--neutral-2) 4px 5px)}
+.x3-gap i{position:absolute;inset:0 auto 0 0;width:7.5%;border-radius:4px;background:var(--green);transform-origin:left;animation:x3-grow 900ms var(--ease-out) 250ms both}
+.x3-gap b{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);width:30%;left:-30%}
+.x3-on:not(.motion-paused) .x3-gap b{animation:x3-scan 2.8s linear 1.2s infinite}
+@keyframes x3-grow{from{transform:scaleX(0)}}
+@keyframes x3-scan{to{left:100%}}
+
+/* card 2: the three layers as an isometric 3D stack */
+.x3-mini{grid-template-columns:98px 1fr!important;column-gap:10px!important;align-items:center}
+.x3-mini .mini__col{display:none}
+.x3-mini .mini__lab{grid-template-rows:none;align-content:center;gap:9px;line-height:1.2}
+.x3-mini .mini__lab span{display:grid;grid-template-columns:9px 1fr;gap:7px;align-items:baseline;align-self:auto!important}
+.x3-mini .mini__lab span::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--ink)}
+.x3-mini .mini__lab span:nth-child(2)::before{background:var(--oasis)}
+.x3-mini .mini__lab span:nth-child(3)::before{background:var(--green)}
+.x3-stack{position:relative;display:block;width:98px;height:112px}
+.x3-stack__in{position:absolute;left:50%;top:68%;width:52px;height:52px;margin:-26px 0 0 -26px;transform:rotateX(58deg) rotateZ(45deg);transform-style:preserve-3d}
+.x3-on:not(.motion-paused) .x3-stack__in{animation:x3-turn 9s ease-in-out infinite alternate}
+@keyframes x3-turn{from{transform:rotateX(58deg) rotateZ(33deg)}to{transform:rotateX(58deg) rotateZ(57deg)}}
+.x3-slab{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--z) + var(--i)*var(--lift,0px)));transition:transform 500ms var(--ease-out);animation:x3-drop 800ms cubic-bezier(.3,1.3,.5,1) calc(var(--i)*150ms + 120ms) backwards}
+.pin:hover .x3-slab,.pin:focus-visible .x3-slab{--lift:9px}
+.x3-slab b{position:absolute;display:block}
+.x3-slab .t{inset:0;transform:translateZ(var(--h));background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.x3-slab .f{left:0;bottom:0;width:100%;height:var(--h);transform-origin:bottom;transform:rotateX(-90deg);background:color-mix(in srgb,var(--c) 80%,#000)}
+.x3-slab .s{top:0;right:0;width:var(--h);height:100%;transform-origin:right;transform:rotateY(90deg);background:color-mix(in srgb,var(--c) 62%,#000)}
+.x3-stack::after{content:"";position:absolute;left:50%;top:68%;width:86px;height:44px;margin:-10px 0 0 -43px;border-radius:50%;background:radial-gradient(closest-side,rgba(11,12,61,.22),transparent);z-index:-1}
+@keyframes x3-drop{from{transform:translateZ(calc(var(--z) + 150px))}}
+.x3-stack{animation:ebo-fade 500ms var(--ease-out) both}
+
+/* card 3: readiness ring */
+.x3-on .pin .ring__fg{stroke:var(--green)}
+.x3-on .pin .ring__bg{stroke-dasharray:2 5;transform-box:fill-box;transform-origin:center}
+.x3-on:not(.motion-paused) .pin .ring__bg{animation:x3-spin 14s linear infinite}
+@keyframes x3-spin{to{transform:rotate(360deg)}}
+
+/* card 4: a pulse travels the four gates */
+.x3-on .gates::after{content:"";position:absolute;top:3px;left:4px;width:22px;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--green));opacity:0}
+.x3-on:not(.motion-paused) .gates::after{animation:x3-travel 3.4s cubic-bezier(.5,0,.3,1) infinite}
+@keyframes x3-travel{0%{left:4px;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(75% - 14px);opacity:0}}
+
+/* ---------- Seats: tilt and a true 3D flip to "What it takes" ---------- */
+.x3-on .seat .ph{-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:transform 760ms cubic-bezier(.3,.9,.3,1),visibility 0s,box-shadow 400ms var(--ease-out)}
+.x3-on .seat.is-flipped .ph{opacity:1;transform:rotateY(180deg);visibility:hidden;transition:transform 760ms cubic-bezier(.3,.9,.3,1),visibility 0s 760ms}
+.x3-on .seat__back{-webkit-backface-visibility:hidden;backface-visibility:hidden;transform:rotateY(0);background:linear-gradient(150deg,#fff,var(--panel) 60%,var(--green-tint));box-shadow:inset 0 0 0 1px var(--line),0 30px 50px -30px rgba(11,12,61,.4);
+  transition:transform 760ms cubic-bezier(.3,.9,.3,1),display 760ms allow-discrete}
+.x3-on .seat__back[hidden]{transform:rotateY(-180deg)}
+@starting-style{.x3-on .seat__back{transform:rotateY(-180deg)}}
+.x3-on .seat h3{transition:color var(--dur-2) var(--ease-out)}
+
+/* ---------- Closing: a rotating lender-network globe behind the photo ---------- */
+.x3-on .start__in{position:relative;isolation:isolate}
+.x3-globe{position:absolute;z-index:-1;pointer-events:none;max-width:none}
+
+/* ---------- Builder: the two stacks become solid prisms (oblique projection, single layer: no nested preserve-3d) ---------- */
+.x3-prism{--x3d:11px}
+.deal-ui[data-w=s] .x3-prism{--x3d:8px}
+.x3-prism .deal-clip{border-radius:0}
+.x3-prism .deal-clip::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,0) 42%,rgba(0,0,0,.07))}
+.x3-side{position:absolute;left:100%;top:0;width:var(--x3d);height:100%;overflow:hidden;transform-origin:0 100%;transform:skewY(-45deg);filter:brightness(.7)}
+.x3-side>div{position:absolute;inset:0}
+.x3-top{position:absolute;left:0;width:100%;height:var(--x3d);top:calc(var(--x3top,0px) - var(--x3d));transform-origin:0 100%;transform:skewX(-45deg);background:var(--x3c,transparent);filter:brightness(1.14) saturate(.92);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.35)}
+.x3-prism::before{content:"";position:absolute;left:4px;right:calc(var(--x3d)*-2);bottom:-9px;height:14px;background:radial-gradient(closest-side,rgba(11,12,61,.24),transparent);pointer-events:none}
+.x3-on .deal-gap{translate:5px 0}
+.x3-on .deal-read{background:linear-gradient(155deg,#fff -20%,var(--panel) 38%,var(--green-tint) 130%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),0 24px 40px -30px rgba(11,12,61,.35)}
+.x3-on .deal-ui[data-state=won] .deal-read{box-shadow:inset 0 0 0 1px rgba(0,163,91,.35),0 24px 46px -26px rgba(0,163,91,.5)}
+.x3-on .deal-ctl-row{box-shadow:0 8px 14px -12px rgba(11,12,61,.35)}
+.x3-on .deal-rng input::-webkit-slider-thumb{box-shadow:0 5px 10px -4px rgba(11,12,61,.45)}
+.x3-on:not(.motion-paused) .deal-win:not([hidden]){animation:x3-card 600ms cubic-bezier(.2,.9,.3,1) both;transform-origin:50% 100%}
+
+/* ---------- Dialogs ---------- */
+.x3-on .dlg::backdrop{-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2)}
+.x3-on .dlg[open] .rules li{animation:ebo-in 500ms var(--ease-out) both}
+.x3-on .dlg[open] .rules li:nth-child(1){animation-delay:120ms}.x3-on .dlg[open] .rules li:nth-child(2){animation-delay:180ms}
+.x3-on .dlg[open] .rules li:nth-child(3){animation-delay:240ms}.x3-on .dlg[open] .rules li:nth-child(4){animation-delay:300ms}
+.x3-on .dlg[open] .rules li:nth-child(5){animation-delay:360ms}.x3-on .dlg[open] .rules li:nth-child(6){animation-delay:420ms}
+.x3-on .dlg[open] .rules li:nth-child(7){animation-delay:480ms}
+.x3-on .ready__ring .ring__fg{stroke:var(--green)}
+.x3-on .ready__score{background:linear-gradient(160deg,var(--panel),var(--green-tint))}
+
+/* ---------- Stillness ---------- */
+.motion-paused.x3-on #hero::before,.motion-paused.x3-on .h1-accent{animation-play-state:paused}
+.motion-paused .x3-tilt{transform:none}
+@media (prefers-reduced-motion:reduce){
+  .x3-rv{opacity:1;transform:none;filter:none}
+  .x3-on #hero::before,.x3-on .h1-accent:not(.fx-hold),.x3-slab,.x3-gap i{animation:none}
+  .x3-on .seat .ph,.x3-on .seat.is-flipped .ph,.x3-on .seat__back{transition-duration:.01ms}
+  .x3-tilt{transform:none}
+}
+@media print{.x3-hero,.x3-strand,.x3-progress,.x3-globe{display:none!important}.x3-rv{opacity:1!important;transform:none!important;filter:none!important}}
